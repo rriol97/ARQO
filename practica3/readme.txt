@@ -1,1 +1,1 @@
-Esta es la carpeta de la practuca 3 de arqo
+Esta es la carpeta de la practica 3 de arqo

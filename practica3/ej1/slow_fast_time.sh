@@ -39,7 +39,7 @@ set xlabel "Tamanyo de la matriz"
 set key right bottom
 set grid
 set term png
-set output "$fPNG"
+set output "time_slow_fast.png"
 plot "$fDAT" using 1:2 with lines lw 2 title "slow", \
      "$fDAT" using 1:3 with lines lw 2 title "fast"
 replot

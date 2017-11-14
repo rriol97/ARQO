@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# inicializar variables
+Ninicio=10000
+Npaso=64
+Nfinal=$((Ninicio + 1024))
+fDAT=slow_fast_time.dat
+fPNG=slow_fast_time.png
+Nreps=3
+
+# borrar el fichero DAT y el fichero PNG
+rm -f *.dat *.png
+
+# generar el fichero DAT vacío
+touch $fDAT
+
+echo "Ejecutando el script..."
+# bucle para N desde P hasta Q 
+#for N in $(seq $Ninicio $Npaso $Nfinal);
+for ((i = 0; i < Nreps; i++)); do
+	echo "->Repeticion $i/$Nreps"
+	for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
+		echo "N: $N / $Nfinal..."
+	
+		# ejecutar los programas slow y fast consecutivamente con tamaño de matriz N
+		# para cada uno, filtrar la línea que contiene el tiempo y seleccionar la
+		# tercera columna (el valor del tiempo). Dejar los valores en variables
+		# para poder imprimirlos en la misma línea del fichero de datos
+		slowTime=$(./slow $N | grep 'time' | awk '{print $3}')
+		fastTime=$(./fast $N | grep 'time' | awk '{print $3}')
+
+		echo "$N	$slowTime	$fastTime" >> $fDAT
+	done
+done
+
+awk 'BEGIN {n = 3}
+{
+	acum_slow[$1] += $2;
+	acum_fast[$1] += $3; 
+}
+END {
+	for (x = 10000; x <= 11024; x += 64) {
+		print x"\t"acum_slow[x]/n"\t"acum_fast[x]/n; 
+	}
+}' $fDAT >> slow_fast_media.dat
+
+echo "Generating plot..."
+# llamar a gnuplot para generar el gráfico y pasarle directamente por la entrada
+# estándar el script que está entre "<< END_GNUPLOT" y "END_GNUPLOT"
+gnuplot << END_GNUPLOT
+set title "Slow-Fast Tiempo de ejecucion"
+set ylabel "Tiempo de ejecucion (s)"
+set xlabel "Tamanyo de la matriz"
+set key right bottom
+set grid
+set term png
+set output "time_slow_fast.png"
+plot "$fDAT" using 1:2 with lines lw 2 title "slow", \
+     "$fDAT" using 1:3 with lines lw 2 title "fast"
+replot
+quit
+END_GNUPLOT
+
+gnuplot << END_GNUPLOT
+set title "Slow-Fast Tiempo de ejecucion [media]"
+set ylabel "Tiempo de ejecucion (s)"
+set xlabel "Tamanyo de la matriz"
+set key right bottom
+set grid
+set term png
+set output "time_slow_fast_media.png"
+plot "slow_fast_media.dat" using 1:2 with lines lw 2 title "slow", \
+     "slow_fast_media.dat" using 1:3 with lines lw 2 title "fast"
+replot
+quit
+END_GNUPLOT

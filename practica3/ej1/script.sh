@@ -6,7 +6,7 @@ Npaso=64
 Nfinal=$((Ninicio + 1024))
 fDAT=slow_fast_time.dat
 fPNG=slow_fast_time.png
-Nreps=3
+Nreps=10
 
 # borrar el fichero DAT y el fichero PNG
 rm -f *.dat *.png
@@ -17,7 +17,7 @@ touch $fDAT
 echo "Ejecutando el script..."
 # bucle para N desde P hasta Q 
 #for N in $(seq $Ninicio $Npaso $Nfinal);
-for ((i = 0; i < Nreps; i++)); do
+for ((i = 1; i <= Nreps; i++)); do
 	echo "->Repeticion $i/$Nreps"
 	for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 		echo "N: $N / $Nfinal..."
@@ -33,44 +33,16 @@ for ((i = 0; i < Nreps; i++)); do
 	done
 done
 
-awk 'BEGIN {n = 3}
+awk -v ini=$Ninicio -v fin=$Nfinal -v paso=$Npaso -v reps=$Nreps '
 {
 	acum_slow[$1] += $2;
 	acum_fast[$1] += $3; 
 }
 END {
-	for (x = 10000; x <= 11024; x += 64) {
-		print x"\t"acum_slow[x]/n"\t"acum_fast[x]/n; 
+	for (x = ini; x <= fin; x += paso) {
+		print x"\t"acum_slow[x]/reps"\t"acum_fast[x]/reps; 
 	}
 }' $fDAT >> slow_fast_media.dat
 
-echo "Generating plot..."
-# llamar a gnuplot para generar el gráfico y pasarle directamente por la entrada
-# estándar el script que está entre "<< END_GNUPLOT" y "END_GNUPLOT"
-gnuplot << END_GNUPLOT
-set title "Slow-Fast Tiempo de ejecucion"
-set ylabel "Tiempo de ejecucion (s)"
-set xlabel "Tamanyo de la matriz"
-set key right bottom
-set grid
-set term png
-set output "time_slow_fast.png"
-plot "$fDAT" using 1:2 with lines lw 2 title "slow", \
-     "$fDAT" using 1:3 with lines lw 2 title "fast"
-replot
-quit
-END_GNUPLOT
-
-gnuplot << END_GNUPLOT
-set title "Slow-Fast Tiempo de ejecucion [media]"
-set ylabel "Tiempo de ejecucion (s)"
-set xlabel "Tamanyo de la matriz"
-set key right bottom
-set grid
-set term png
-set output "time_slow_fast_media.png"
-plot "slow_fast_media.dat" using 1:2 with lines lw 2 title "slow", \
-     "slow_fast_media.dat" using 1:3 with lines lw 2 title "fast"
-replot
-quit
-END_GNUPLOT
+./genera_grafica.sh $fDAT SlowFastTiempoEjecucion TiempoEjecucion_s TamanyoMatriz timeSlowFast.png
+./genera_grafica.sh slow_fast_media.dat TiemposMedia TiempoEjecucion_s TamanyoMatriz timeSlowFastMedia.png

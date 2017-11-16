@@ -1,27 +1,65 @@
 #!/bin/bash
+rm -f *.dat
 
 # inicializacion de variables
 Ninicio=2000
 Npaso=64
 Nfinal=$((Ninicio + 1024))
 Ncache1=1024
+NcacheFinal1=2048
 factor=2
-CacheMega=8e+06;
-tam_linea=64;
-Nreps=5
+CacheMega=8388608
+TamLinea=64
+Nvias=1
 
 # borrar el fichero DAT y el fichero PNG
 rm -f *.dat *.png
-
-echo "Ejecutando el script..."
-for ((i = 1; i<=Nreps; i++)); do
-	echo "->>Repeticion $i/$Nreps"
+for ((K = Ncache1 ; K <= NcacheFinal1 ; K *= 2)); do
+	echo "->>Tamanio $K/$NcacheFinal1"
 	for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 		echo "N: $N / $Nfinal..."
-		valgrind --tool=cachegrind --cachegrind-out-file=cacheSlow.dat ./slow > salida1.txt
-		valgrind --tool=cachegrind --cachegrind-out-file=cacheFast.dat ./fast > salida2.txt
-		slow_miss=$(head -n 18 cacheSlow.dat | tail -n 1 | awk '{print $4}')
-		fast_miss=$(head -n 18 cacheFast.dat | tail -n 1 | awk '{print $4}')
-		echo "$N	$slow_miss	$fast_miss" >> slowFastMisses.dat
+		valgrind --quiet --tool=cachegrind --I1=$K,$Nvias,$TamLinea --cachegrind-out-file=cacheSlow.dat ./slow $N
+		valgrind --quiet --tool=cachegrind --I1=$K,$Nvias,$TamLinea --cachegrind-out-file=cacheFast.dat ./fast $N
+		slow_miss_d1mr=$(cg_annotate cacheSlow.dat | head -n 18 | tail -n 1 | awk '{print $5}')
+		slow_miss_d1mw=$(cg_annotate cacheSlow.dat | head -n 18 | tail -n 1 | awk '{print $8}')
+		fast_miss_d1mr=$(cg_annotate cacheFast.dat | head -n 18 | tail -n 1 | awk '{print $5}')
+		fast_miss_d1mw=$(cg_annotate cacheFast.dat | head -n 18 | tail -n 1 | awk '{print $8}')
+		echo "$N $slow_miss_d1mr $slow_miss_d1mw $fast_miss_d1mr $fast_miss_d1mw" >> cache_$K.dat
+
+		rm -f cacheSlow.dat
+		rm -f cacheFast.dat
 	done
 done
+
+gnuplot << END_GNUPLOT
+	set title "Misses lectura"
+	set ylabel "Numero fallos"
+	set xlabel "Tamano matriz"
+	set key right bottom
+	set grid
+	set term png
+	set output "cache_lectura.png"
+	plot "cache_1024.dat" using 1:2 with lines lw 2 title "slow_1024", \
+	     "cache_1024.dat" using 1:4 with lines lw 2 title "fast_1024", \
+	     "cache_2048.dat" using 1:2 with lines lw 2 title "slow_2048", \
+	     "cache_2048.dat" using 1:4 with lines lw 2 title "fast_2048"
+	replot
+	quit
+END_GNUPLOT
+
+	gnuplot << END_GNUPLOT
+	set title "Misses escritura"
+	set ylabel "Numero fallos"
+	set xlabel "Tamano matriz"
+	set key right bottom
+	set grid
+	set term png
+	set output "cache_escritura.png"
+	plot "cache_1024.dat" using 1:3 with lines lw 2 title "slow_1024", \
+	     "cache_1024.dat" using 1:5 with lines lw 2 title "fast_1024", \
+	     "cache_2048.dat" using 1:3 with lines lw 2 title "slow_2048", \
+	     "cache_2048.dat" using 1:5 with lines lw 2 title "fast_2048"
+	replot
+	quit
+END_GNUPLOT
+

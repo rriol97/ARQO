@@ -18,8 +18,8 @@ for ((K = Ncache1 ; K <= NcacheFinal1 ; K *= 2)); do
 	echo "->>Tamanio $K/$NcacheFinal1"
 	for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 		echo "N: $N / $Nfinal..."
-		valgrind --quiet --tool=cachegrind --I1=$K,$Nvias,$TamLinea --D1=$K,$Nvias,$TamLinea --cachegrind-out-file=cacheSlow.dat ./slow $N
-		valgrind --quiet --tool=cachegrind --I1=$K,$Nvias,$TamLinea --D1=$K,$Nvias,$TamLinea --cachegrind-out-file=cacheFast.dat ./fast $N
+		valgrind --quiet --tool=cachegrind --I1=$K,$Nvias,$TamLinea --D1=$K,$Nvias,$TamLinea --LL=$CacheMega,$Nvias,$TamLinea --cachegrind-out-file=cacheSlow.dat ./slow $N
+		valgrind --quiet --tool=cachegrind --I1=$K,$Nvias,$TamLinea --D1=$K,$Nvias,$TamLinea --LL=$CacheMega,$Nvias,$TamLinea --cachegrind-out-file=cacheFast.dat ./fast $N
 		slow_miss_d1mr=$(cg_annotate cacheSlow.dat | head -n 18 | tail -n 1 | awk '{print $5}')
 		slow_miss_d1mw=$(cg_annotate cacheSlow.dat | head -n 18 | tail -n 1 | awk '{print $8}')
 		fast_miss_d1mr=$(cg_annotate cacheFast.dat | head -n 18 | tail -n 1 | awk '{print $5}')

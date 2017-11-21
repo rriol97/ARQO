@@ -6,14 +6,15 @@
 #define OK 1
 #define ERROR -1
 
-tipo **traspuesta (tipo **matrix, int dim);
+/* tipo **traspuesta(tipo **matrix, int dim); */
+void trasponer(tipo **M, tipo **Mt, int n);
 
 int main(int argc, char *argv[]){
-  int i,j,k,suma;
+  int i,j,k;
   int N;
-  tipo **A, **B, **C;
+  tipo **A, **B, **C, **Bt;
   clock_t t_ini, t_fin;
-  double secs;
+  double secs, suma;
 
   if (argc != 2){
     printf ("Error en los argumentos de entrada: <int n>\n");
@@ -24,20 +25,23 @@ int main(int argc, char *argv[]){
   /** Generamos las matrices de tamaño N */
   A = generateMatrix(N);
   B = generateMatrix(N);
+  Bt = generateEmptyMatrix(N);
   C = generateEmptyMatrix(N); /** Matriz resultado*/
 
-   t_ini = clock(); /**Tomamos el tiempo antes de empezar la rutina*/
+  t_ini = clock(); /**Tomamos el tiempo antes de empezar la rutina*/
 
    /**Calculamos la matriz traspuesta de B*/
-   B = traspuesta (B,N);
+   /* B = traspuesta(B, N); */
+   trasponer(B, Bt, N);
+
   /** Hacemos C = A * B   */
   for (i = 0; i < N; i++) {
     for (j = 0; j < N; j++) {
       suma = 0;
       for (k = 0; k < N; k++){
-        suma += A[i][k] * B[k][j];
+        suma += A[i][k] * Bt[j][k];
       }
-      C [i][j] = suma;
+      C[i][j] = suma;
     }
   }
 
@@ -45,23 +49,46 @@ int main(int argc, char *argv[]){
   secs = (double)(t_fin - t_ini) / CLOCKS_PER_SEC; /** Calculamos el tiempo que tarda la rutina*/
   printf ("%f\n", secs);
 
+  for (i = 0; i < N; i++) {
+    for (j = 0; j < N; j++) {
+      printf("%lf ", C[i][j]);
+    }
+    printf("\n");
+  }
+
   freeMatrix(A);
   freeMatrix(B);
   freeMatrix(C);
   return OK;
 }
 
-/**Implemetancion de la funcion traspuesta*/
-tipo **traspuesta (tipo **matrix, int dim){
+/** Implemetancion de la funcion traspuesta */
+tipo **traspuesta(tipo **matrix, int dim){
   tipo **sol;
   int i,j;
+  double valor;
 
   sol = generateEmptyMatrix(dim);
 
   for (i = 0; i < dim; i++){
     for (j = 0; j < dim; j++){
-      sol[i][j] = matrix[j][i];
+      valor = matrix[j][i];
+      sol[i][j] = valor;
     }
   }
   return sol;
+}
+
+void trasponer(tipo **M, tipo **Mt, int n) {
+  double valor;
+  int i, j;
+
+  for (i = 0; i < n; i++){
+    for (j = 0; j < n; j++){
+      valor = M[j][i];
+      Mt[i][j] = valor;
+    }
+  }
+
+  return;
 }

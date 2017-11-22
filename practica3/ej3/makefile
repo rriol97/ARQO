@@ -15,4 +15,4 @@ multiplicador_matrices_traspuesta.o: multiplicador_matrices_traspuesta.c arqo3.c
 	gcc $(CCFLAGS) multiplicador_matrices_traspuesta.c arqo3.c arqo3.h
 
 clean:
-	rm -rf *.o MultiplicarMatrices MultiplicarMatricesTraspuesta
+	rm -rf *.o MultiplicarMatrices MultiplicarMatricesTraspuesta arqo3.h.gch

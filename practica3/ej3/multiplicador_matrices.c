@@ -41,13 +41,6 @@ int main(int argc, char *argv[]){
   secs = (double)(t_fin - t_ini) / CLOCKS_PER_SEC; /** Calculamos el tiempo que tarda la rutina */
   printf ("%f\n", secs);
 
-  for (i = 0; i < N; i++) {
-    for (j = 0; j < N; j++) {
-      printf("%lf ", C[i][j]);
-    }
-    printf("\n");
-  }
-
   freeMatrix(A);
   freeMatrix(B);
   freeMatrix(C);

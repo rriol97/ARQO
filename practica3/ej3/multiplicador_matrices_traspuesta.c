@@ -49,13 +49,6 @@ int main(int argc, char *argv[]){
   secs = (double)(t_fin - t_ini) / CLOCKS_PER_SEC; /** Calculamos el tiempo que tarda la rutina*/
   printf ("%f\n", secs);
 
-  for (i = 0; i < N; i++) {
-    for (j = 0; j < N; j++) {
-      printf("%lf ", C[i][j]);
-    }
-    printf("\n");
-  }
-
   freeMatrix(A);
   freeMatrix(B);
   freeMatrix(C);
@@ -63,22 +56,6 @@ int main(int argc, char *argv[]){
 }
 
 /** Implemetancion de la funcion traspuesta */
-tipo **traspuesta(tipo **matrix, int dim){
-  tipo **sol;
-  int i,j;
-  double valor;
-
-  sol = generateEmptyMatrix(dim);
-
-  for (i = 0; i < dim; i++){
-    for (j = 0; j < dim; j++){
-      valor = matrix[j][i];
-      sol[i][j] = valor;
-    }
-  }
-  return sol;
-}
-
 void trasponer(tipo **M, tipo **Mt, int n) {
   double valor;
   int i, j;

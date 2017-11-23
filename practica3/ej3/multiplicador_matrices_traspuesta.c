@@ -9,7 +9,7 @@
 /* tipo **traspuesta(tipo **matrix, int dim); */
 void trasponer(tipo **M, tipo **Mt, int n);
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
   int i,j,k;
   int N;
   tipo **A, **B, **C, **Bt;
@@ -30,9 +30,8 @@ int main(int argc, char *argv[]){
 
   t_ini = clock(); /**Tomamos el tiempo antes de empezar la rutina*/
 
-   /**Calculamos la matriz traspuesta de B*/
-   /* B = traspuesta(B, N); */
-   trasponer(B, Bt, N);
+  /**Calculamos la matriz traspuesta de B*/
+  trasponer(B, Bt, N);
 
   /** Hacemos C = A * B   */
   for (i = 0; i < N; i++) {
@@ -57,13 +56,11 @@ int main(int argc, char *argv[]){
 
 /** Implemetancion de la funcion traspuesta */
 void trasponer(tipo **M, tipo **Mt, int n) {
-  double valor;
   int i, j;
 
   for (i = 0; i < n; i++){
     for (j = 0; j < n; j++){
-      valor = M[j][i];
-      Mt[i][j] = valor;
+      Mt[i][j] = M[j][i];
     }
   }
 

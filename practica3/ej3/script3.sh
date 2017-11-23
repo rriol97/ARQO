@@ -2,9 +2,9 @@
 
 #inicilizar variables
 Ninicio=256
-Npaso=16
+Npaso=32
 Nfinal=$((Ninicio + 256))
-Nreps=5
+Nreps=3
 fDAT=mult.dat
 fPNG1=mult_cache.png
 fPNG2=mult_time.png
@@ -55,6 +55,7 @@ gnuplot << END_GNUPLOT
   set title "Cache Multiplicaciones"
   set ylabel "Numero fallos"
   set xlabel "Tamano matriz"
+  set logscale y
   set key right bottom
   set grid
   set term png

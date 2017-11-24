@@ -56,7 +56,7 @@ gnuplot << END_GNUPLOT
 	replot
 	quit
 END_GNUPLOT
-ç
+
 # representacion de los fallos de cache en escritura
 gnuplot << END_GNUPLOT
 	set title "Misses escritura"

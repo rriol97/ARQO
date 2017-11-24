@@ -14,8 +14,10 @@ Nvias=1
 
 # borrar el fichero DAT y el fichero PNG
 rm -f *.dat *.png
+# bucle para cambiar el tamanyo de las caches
 for ((K = Ncache1 ; K <= NcacheFinal1 ; K *= 2)); do
 	echo "->>Tamanio $K/$NcacheFinal1"
+	# bucle que hace variar la dimension de la matriz
 	for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 		echo "N: $N / $Nfinal..."
 		valgrind --quiet --tool=cachegrind --I1=$K,$Nvias,$TamLinea --D1=$K,$Nvias,$TamLinea --LL=$CacheMega,$Nvias,$TamLinea --cachegrind-out-file=cacheSlow.dat ./slow $N
@@ -24,7 +26,9 @@ for ((K = Ncache1 ; K <= NcacheFinal1 ; K *= 2)); do
 		slow_miss_d1mw=$(cg_annotate cacheSlow.dat | head -n 18 | tail -n 1 | awk '{print $8}')
 		fast_miss_d1mr=$(cg_annotate cacheFast.dat | head -n 18 | tail -n 1 | awk '{print $5}')
 		fast_miss_d1mw=$(cg_annotate cacheFast.dat | head -n 18 | tail -n 1 | awk '{print $8}')
+
 		echo "$N $slow_miss_d1mr $slow_miss_d1mw $fast_miss_d1mr $fast_miss_d1mw" >> cache_$K.dat
+		# sustitucion de comas por espacion en los ficheros para que sean compatibles con gnuplot
 		sed -i 's/,//g' cache_$K.dat
 
 		rm -f cacheSlow.dat
@@ -32,6 +36,7 @@ for ((K = Ncache1 ; K <= NcacheFinal1 ; K *= 2)); do
 	done
 done
 
+# representacion de los fallos de cache en lectura
 gnuplot << END_GNUPLOT
 	set title "Misses lectura"
 	set ylabel "Numero fallos"
@@ -51,8 +56,9 @@ gnuplot << END_GNUPLOT
 	replot
 	quit
 END_GNUPLOT
-
-	gnuplot << END_GNUPLOT
+ç
+# representacion de los fallos de cache en escritura
+gnuplot << END_GNUPLOT
 	set title "Misses escritura"
 	set ylabel "Numero fallos"
 	set xlabel "Tamano matriz"

@@ -4,9 +4,9 @@
 Ninicio=10000
 Npaso=64
 Nfinal=$((Ninicio + 1024))
-fDAT=slow_fast_time.dat
-fPNG=slow_fast_time.png
-Nreps=10
+fDAT=time_slow_fast.dat
+fPNG=time_slow_fast.png
+Nreps=20
 
 # borrar el fichero DAT y el fichero PNG
 rm -f *.dat *.png
@@ -15,13 +15,12 @@ rm -f *.dat *.png
 touch $fDAT
 
 echo "Ejecutando el script..."
-# bucle para N desde P hasta Q 
-#for N in $(seq $Ninicio $Npaso $Nfinal);
+# bucle que ejecuta el numero indicado de repeticiones
 for ((i = 1; i <= Nreps; i++)); do
 	echo "->Repeticion $i/$Nreps"
+	# bucle que hace variar la dimension de la matriz
 	for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 		echo "N: $N / $Nfinal..."
-	
 		# ejecutar los programas slow y fast consecutivamente con tamaño de matriz N
 		# para cada uno, filtrar la línea que contiene el tiempo y seleccionar la
 		# tercera columna (el valor del tiempo). Dejar los valores en variables
@@ -33,6 +32,7 @@ for ((i = 1; i <= Nreps; i++)); do
 	done
 done
 
+# calculo de medias
 awk -v ini=$Ninicio -v fin=$Nfinal -v paso=$Npaso -v reps=$Nreps '
 {
 	acum_slow[$1] += $2;
@@ -44,5 +44,5 @@ END {
 	}
 }' $fDAT >> slow_fast_media.dat
 
-./genera_grafica.sh $fDAT SlowFastTiempoEjecucion TiempoEjecucion_s TamanyoMatriz timeSlowFast.png
-./genera_grafica.sh slow_fast_media.dat TiemposMedia TiempoEjecucion_s TamanyoMatriz timeSlowFastMedia.png
+# representacion de los tiempos de ejecucion
+./genera_grafica.sh slow_fast_media.dat TiemposMedia TiempoEjecucion_s TamanyoMatriz time_slow_fast.png

@@ -15,11 +15,11 @@
 	typedef float tipo;
 #endif
 
-float ** generateMatrix(int);
-float ** generateEmptyMatrix(int);
-void freeMatrix(float **);
-float * generateVector(int);
-float * generateEmptyVector(int);
+tipo ** generateMatrix(int);
+tipo ** generateEmptyMatrix(int);
+void freeMatrix(tipo **);
+tipo * generateVector(int);
+tipo * generateEmptyVector(int);
 int * generateEmptyIntVector(int);
 void freeVector(void *);
 

@@ -7,14 +7,14 @@
 
 #include "arqo4.h"
 
-float ** generateMatrix(int size)
+tipo ** generateMatrix(int size)
 {
-	float *array=NULL;
-	float **matrix=NULL;
+	tipo *array=NULL;
+	tipo **matrix=NULL;
 	int i=0,j=0;
 
-	matrix=(float **)malloc(sizeof(float *)*size);
-	array=(float *)malloc(sizeof(float)*size*size);
+	matrix=(tipo **)malloc(sizeof(tipo *)*size);
+	array=(tipo *)malloc(sizeof(tipo)*size*size);
 	if( !array || !matrix)
 	{
 		printf("Error when allocating matrix of size %d.\n",size);
@@ -38,14 +38,14 @@ float ** generateMatrix(int size)
 	return matrix;
 }
 
-float ** generateEmptyMatrix(int size)
+tipo ** generateEmptyMatrix(int size)
 {
-	float *array=NULL;
-	float **matrix=NULL;
+	tipo *array=NULL;
+	tipo **matrix=NULL;
 	int i=0;
 
-	matrix=(float **)malloc(sizeof(float *)*size);
-	array=(float *)malloc(sizeof(float)*size*size);
+	matrix=(tipo **)malloc(sizeof(tipo *)*size);
+	array=(tipo *)malloc(sizeof(tipo)*size*size);
 	if( !array || !matrix)
 	{
 		printf("Error when allocating matrix of size %d.\n",size);
@@ -65,7 +65,7 @@ float ** generateEmptyMatrix(int size)
 }
 
 
-void freeMatrix(float **matrix)
+void freeMatrix(tipo **matrix)
 {
 	if( matrix && matrix[0] )
 		free(matrix[0]);
@@ -74,12 +74,12 @@ void freeMatrix(float **matrix)
 	return;
 }
 
-float * generateVector(int size)
+tipo * generateVector(int size)
 {
-	float *array=NULL;
+	tipo *array=NULL;
 	int i=0;
 
-	array=(float *)malloc(sizeof(float)*size);
+	array=(tipo *)malloc(sizeof(tipo)*size);
 	if( !array )
 	{
 		printf("Error when allocating vector of size %d.\n",size);
@@ -96,11 +96,11 @@ float * generateVector(int size)
 	return array;
 }
 
-float * generateEmptyVector(int size)
+tipo * generateEmptyVector(int size)
 {
-	float *array=NULL;
+	tipo *array=NULL;
 
-	array=(float *)malloc(sizeof(float)*size);
+	array=(tipo *)malloc(sizeof(tipo)*size);
 	if( !array )
 	{
 		printf("Error when allocating vector of size %d.\n",size);

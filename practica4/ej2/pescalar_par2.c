@@ -1,19 +1,28 @@
 // ----------- Arqo P4-----------------------
 // pescalar_par2
 //
+#include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "arqo4.h"
 
-int main(void)
-{
+int main(int argc, char *argv[]){
+	int thr, tam;
 	float *A=NULL, *B=NULL;
 	long long k=0;
 	struct timeval fin,ini;
 	float sum=0;
+
+	if (argc != 3){
+		printf ("Error en los argumentos de entrada: <num_hilos <tamanio>\n");
+		return -1;
+	}
 	
-	A = generateVector(M);
-	B = generateVector(M);
+	thr = atoi(argv[1]);
+	tam = atoi(argv[2]);
+
+	A = generateVector(tam);
+	B = generateVector(tam);
 	if ( !A || !B )
 	{
 		printf("Error when allocationg matrix\n");
@@ -21,13 +30,14 @@ int main(void)
 		freeVector(B);
 		return -1;
 	}
+
+	omp_set_num_threads(thr);	//Fijamos el numero de hilos
 	
 	gettimeofday(&ini,NULL);
 	/* Bloque de computo */
 	sum = 0;
 	#pragma omp parallel for reduction(+:sum)
-	for(k=0;k<M;k++)
-	{
+	for(k = 0; k < tam; k++) {
 		sum = sum + A[k]*B[k];
 	}
 	/* Fin del computo */

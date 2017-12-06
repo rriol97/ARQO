@@ -4,25 +4,22 @@ FLAGS = -g -lgomp -Wall -D_GNU_SOURCE -fopenmp
 
 .PHONY: clean all
 
-all: omp1 omp2 pescalar_serie pescalar_par1 pescalar_par2 clear
+all: multiplicador_matrices multiplicador_matrices_1 multiplicador_matrices_2 multiplicador_matrices_3 clear
 
-omp1: omp1.c
+multiplicador_matrices: multiplicador_matrices.c arqo4.c
 	gcc $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
 
-omp2: omp2.c
+multiplicador_matrices_1: multiplicador_matrices_1.c arqo4.c
 	gcc $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
 
-pescalar_serie: pescalar_serie.c arqo4.c
+multiplicador_matrices_2: multiplicador_matrices_2.c arqo4.c
 	gcc $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
 
-pescalar_par1: pescalar_par1.c arqo4.c
-	gcc $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
-
-pescalar_par2: pescalar_par2.c arqo4.c
+multiplicador_matrices_3: multiplicador_matrices_3.c arqo4.c
 	gcc $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
 
 clean:
-	rm -f *.o *~ omp1 omp2 pescalar_serie pescalar_par1 pescalar_par2
+	rm -f *.o *~ multiplicador_matrices multiplicador_matrices_1 multiplicador_matrices_2 multiplicador_matrices_3
 	
 clear:
 	rm -f *.o *~

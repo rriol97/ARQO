@@ -7,19 +7,18 @@
 #include "arqo4.h"
 
 int main(int argc, char *argv[]){
-	int thr, tam;
+	int tam;
 	float *A=NULL, *B=NULL;
 	long long k=0;
 	struct timeval fin,ini;
 	float sum=0;
 
-	if (argc != 3){
-		printf ("Error en los argumentos de entrada: <num_hilos <tamanio>\n");
+	if (argc != 2){
+		printf ("Error en los argumentos de entrada: <tamanio>\n");
 		return -1;
 	}
 
-	thr = atoi(argv[1]);
-	tam = atoi(argv[2]);
+	tam = atoi(argv[1]);
 	
 	A = generateVector(tam);
 	B = generateVector(tam);
@@ -30,8 +29,6 @@ int main(int argc, char *argv[]){
 		freeVector(B);
 		return -1;
 	}
-
-	omp_set_num_threads(thr); //Fijamos el numero de hilos. Deberia ser intrascendente, ya que en esta versión no se paraleliza el codigo
 
 	gettimeofday(&ini,NULL);
 	/* Bloque de computo */

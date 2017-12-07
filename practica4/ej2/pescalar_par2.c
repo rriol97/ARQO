@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
 	float sum=0;
 
 	if (argc != 3){
-		printf ("Error en los argumentos de entrada: <num_hilos <tamanio>\n");
+		printf ("Error en los argumentos de entrada: <num_hilos> <tamanio>\n");
 		return -1;
 	}
 	

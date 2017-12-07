@@ -18,6 +18,11 @@ int main( int argc, char *argv[] )
 	FILE *f;
 	char buf[512];
 
+	if (argc != 2) {
+		return 1;
+	}
+
+
 	// Obtenemos el numero de cores del equipo
 	numProcs = omp_get_num_procs();
 	printf("Numero de cores del equipo: %d\n", numProcs);
@@ -29,7 +34,7 @@ int main( int argc, char *argv[] )
 	fgets(buf, sizeof(buf), f);
 	pclose(f);
 	linesz = atoi(buf);
-	padsz = linesz / datasz;
+	padsz = atoi(argv[1]);   //linesz / datasz;
 	printf("Cache line size: %d bytes => padding: %d elementos\n", linesz, padsz);
 	
 	// Solicitamos memoria para la suma de cada proceso
@@ -44,7 +49,7 @@ int main( int argc, char *argv[] )
 		int i, tid;
 	
 		// Obtenemos el numero de procesos lanzados	
-                numThreads = omp_get_num_threads();
+        numThreads = omp_get_num_threads();
 	
 		// Obtenemos nuestro identificador de thread
 		tid = omp_get_thread_num();

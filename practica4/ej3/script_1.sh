@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Tam=100
+Tam=1000
 fDAT1=ejecucion.dat
 fDAT2=aceleracion.dat
 

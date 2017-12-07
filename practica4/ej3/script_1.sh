@@ -5,7 +5,7 @@ fDAT1=ejecucion.dat
 fDAT2=aceleracion.dat
 
 #borramos el ficher DAT y los ficheros png antiguos
-rm -f *.dat
+rm -f $fDAT1 $fDAT2
 
 for ((i= 1; i <= 4; i++)); do
 	serie=$(./multiplicador_matrices $Tam)

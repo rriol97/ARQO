@@ -7,11 +7,11 @@
 #define ERROR -1
 
 int main(int argc, char *argv[]){
-	int i, j, k, suma = 0;
+	int i, j, k;
 	int n, hilos;
 	tipo **A = NULL, **B = NULL, **C = NULL;
 	clock_t t_ini, t_fin;
-	double secs;
+	double secs, suma;
 
 	/** Captura parametros entrada */
 	if (argc != 3){
@@ -33,8 +33,8 @@ int main(int argc, char *argv[]){
 	for (i = 0; i < n; i++) {
 		for (j = 0; j < n; j++) {
 			#pragma omp parallel for reduction(+:suma)
-			for(k=0; k<n; k++){
-				suma += A[i][k] * B[k][j];
+			for(k = 0; k < n; k++){
+				suma = A[i][k] * B[k][j]; /** No se emplea el operador += ya que el reduction se encarga de sumar los resultados parciales */
 			}
 			C[i][j] = suma;
 		}

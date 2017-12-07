@@ -5,7 +5,7 @@ TamPaso=64
 TamFin=1541 #1024+512+5 = 1541
 
 NHilos=4 #ver
-Nreps=2
+Nreps=5
 fDAT=tiempos.dat
 
 fPNG1=tiempos.png

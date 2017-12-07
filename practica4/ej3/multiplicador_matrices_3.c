@@ -10,8 +10,8 @@ int main(int argc, char *argv[]){
 	int i,j,k;
 	int n, hilos;
 	tipo **A, **B, **C;
-	clock_t t_ini, t_fin;
-	double secs, suma;
+	struct timeval fin, ini;
+	double suma;
 
 	/** Captura parametros entrada */
 	if (argc != 3){
@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
 	B = generateMatrix(n);
 	C = generateEmptyMatrix(n); /** Matriz resultado */
 
-	t_ini = clock(); /** Tomamos el tiempo antes de empezar la rutina */
+	gettimeofday(&ini,NULL); /** Tomamos el tiempo antes de empezar la rutina */
 
 	/** Hacemos C = A * B   */ 
 	#pragma omp parallel for private(j, k, suma) /** Inicializamos la variables privadas dentro del bucle */
@@ -41,9 +41,8 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-	t_fin = clock(); /** Tomamos el tiempo depues de la rutina */
-	secs = (double)(t_fin - t_ini) / CLOCKS_PER_SEC; /** Calculamos el tiempo que tarda la rutina */
-	printf ("%f\n", secs);
+	gettimeofday(&fin,NULL);; /** Tomamos el tiempo depues de la rutina */
+	printf("%f\n", ((fin.tv_sec*1000000+fin.tv_usec)-(ini.tv_sec*1000000+ini.tv_usec))*1.0/1000000.0); /** Calculamos el tiempo que tarda la rutina */
 
 	freeMatrix(A);
 	freeMatrix(B);

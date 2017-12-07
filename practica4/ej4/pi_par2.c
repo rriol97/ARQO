@@ -32,7 +32,7 @@ int main( int argc, char *argv[] )
 		int i, tid;
 	
 		// Obtenemos el numero de procesos lanzados	
-                numThreads = omp_get_num_threads();
+        numThreads = omp_get_num_threads();
 	
 		// Obtenemos nuestro identificador de thread
 		tid = omp_get_thread_num();

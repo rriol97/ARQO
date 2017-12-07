@@ -40,6 +40,13 @@ int main(int argc, char *argv[]){
 	gettimeofday(&fin,NULL);; /** Tomamos el tiempo depues de la rutina */
 	printf("%f\n", ((fin.tv_sec*1000000+fin.tv_usec)-(ini.tv_sec*1000000+ini.tv_usec))*1.0/1000000.0); /** Calculamos el tiempo que tarda la rutina */
 
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < n; j++) {
+			printf("%lf ", C[i][j]);
+		}
+		printf("\n");
+	}
+
 	freeMatrix(A);
 	freeMatrix(B);
 	freeMatrix(C);

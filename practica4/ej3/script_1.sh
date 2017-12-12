@@ -1,8 +1,8 @@
 #!/bin/bash
 
-Tam=1000
-fDAT1=ejecucion.dat
-fDAT2=aceleracion.dat
+Tam=2000
+fDAT1=ejecucion2.dat
+fDAT2=aceleracion2.dat
 
 #borramos el ficher DAT y los ficheros png antiguos
 rm -f $fDAT1 $fDAT2
